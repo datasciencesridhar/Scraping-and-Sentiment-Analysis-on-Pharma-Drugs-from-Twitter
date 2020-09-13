@@ -1,0 +1,53 @@
+!pip install GetOldTweets3
+
+import GetOldTweets3 as got
+import pandas as pd
+
+#Gleevec
+def get_tweets(state, startdate, enddate, maxtweet):
+    tweetCriteria = got.manager.TweetCriteria().setQuerySearch("Gleevec")\
+                                            .setSince(startdate)\
+                                            .setUntil(enddate)\
+                                            .setNear(state)\
+                                            .setWithin("500mi")\
+                                            .setMaxTweets(maxtweet)
+    tweet = got.manager.TweetManager.getTweets(tweetCriteria)
+    
+    text_tweets = [[tw.id,
+                tw.date,
+                tw.username,
+                tw.text] for tw in tweet]
+    df_state= pd.DataFrame(text_tweets, columns = ['Id','Date','User', 'Text'])
+    
+    return df_state
+    
+df_1 = get_tweets('Gleevec', "2012-08-01", "2020-08-12", 10000)
+df_1.head()
+
+
+df_1.to_csv('/content/Gleevec.csv',index=False)
+ 
+ 
+ #Coronavirus
+def get_tweets(state, startdate, enddate, maxtweet):
+    tweetCriteria = got.manager.TweetCriteria().setQuerySearch("corona")\
+                                            .setSince(startdate)\
+                                            .setUntil(enddate)\
+                                            .setNear(state)\
+                                            .setWithin("500mi")\
+                                            .setMaxTweets(maxtweet)
+    tweet = got.manager.TweetManager.getTweets(tweetCriteria)
+    
+    text_tweets = [[tw.id,
+                tw.date,
+                tw.username,
+                tw.text] for tw in tweet]
+    df_state= pd.DataFrame(text_tweets, columns = ['Id','Date','User', 'Text'])
+    
+    return df_state
+    
+    
+df_1 = get_tweets('corona', "2019-08-01", "2020-08-12", 10000)
+df_1.head()
+
+df_1.to_csv('/content/coronavirus.csv',index=False)
